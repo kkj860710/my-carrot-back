@@ -1,0 +1,113 @@
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
+    <springProfile name="dev">
+        <property resource="application-dev.yml" />
+    </springProfile>
+    <springProfile name="local">
+        <property resource="application-local.yml" />
+    </springProfile>
+    <springProfile name="staging">
+        <property resource="application-staging.yml" />
+    </springProfile>
+    <springProfile name="production">
+        <property resource="application-production.yml" />
+    </springProfile>
+
+    <springProperty name="LOG_PATH" source="log.config.path"/>
+    <springProperty name="LOG_FILE_NAME" source="log.config.filename"/>
+    <springProperty name="INFO_LOG_FILE_NAME" source="log.config.info_filename"/>
+    <springProperty name="LOG_MAX_HISTORY" source="log.config.maxHistory"/>
+    <springProperty name="LOG_TOTAL_SIZE_CAP" source="log.config.totalSizeCap"/>
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative]  %clr(%-5level) %clr(${PID:-}){magenta} %clr(---){faint} %clr([%15.15thread]){faint} %clr(%-40.40logger{36}){cyan} %clr(:){faint} %msg%n"/>
+    <property name="FILE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level ${PID:-} --- [%15.15thread] %-40.40logger{36} : %msg%n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- INFO 전용 파일 Appender -->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${INFO_LOG_FILE_NAME}.log</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="net.logstash.logback.layout.LogstashLayout"/>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${INFO_LOG_FILE_NAME}_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <springProfile name="local">
+        <root level="debug">
+            <appender-ref ref="STDOUT"/>
+        </root>
+        <!--        <logger name="org.mybatis" level="DEBUG" additivity="false">-->
+        <!--            <appender-ref ref="STDOUT" />-->
+        <!--        </logger>-->
+        <logger name="org.springframework.web" level="debug" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+        <logger name="com.ft.mvno" level="debug" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+    </springProfile>
+    <springProfile name="dev">
+        <root level="debug">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+        </root>
+        <logger name="org.springframework.web" level="debug" additivity="false">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+        </logger>
+        <logger name="com.ft.mvno" level="debug" additivity="false">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+        </logger>
+    </springProfile>
+    <springProfile name="stage">
+        <root level="debug">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+        </root>
+        <logger name="org.springframework.web" level="debug" additivity="false">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+        </logger>
+        <logger name="com.ft.mvno" level="debug" additivity="false">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+        </logger>
+    </springProfile>
+    <springProfile name="production">
+        <root level="error">
+            <appender-ref ref="FILE"/>
+        </root>
+        <logger name="org.springframework.web" level="error" additivity="false">
+            <appender-ref ref="FILE"/>
+        </logger>
+        <logger name="com.ft.mvno" level="error" additivity="false">
+            <appender-ref ref="FILE"/>
+        </logger>
+    </springProfile>
+</configuration>

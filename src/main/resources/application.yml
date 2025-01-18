@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: carrot
+  profiles:
+    active: local
+  sql:
+    init:
+      mode: never
+
+# swagger 설정
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /api-test
+    groups-order: desc
+    tags-sorter: alpha
+
