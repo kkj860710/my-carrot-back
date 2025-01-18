@@ -31,7 +31,13 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
-    implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: '6.6.4.Final'
+    implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: '6.1.5.Final'
+    // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
+    implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '8.0.1.Final'
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.8'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
 
     compileOnly 'org.projectlombok:lombok'
