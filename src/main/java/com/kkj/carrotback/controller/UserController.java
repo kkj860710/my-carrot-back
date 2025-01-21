@@ -18,11 +18,14 @@ public class UserController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        return null;
+        log.info("createUser: {}", user);
+        User createdUser = userService.createUser(user);
+        return ResponseEntity.ok(createdUser);
     }
 
     @GetMapping("/sign-in")
     public ResponseEntity<User> getUser(@RequestParam String id) {
+        log.info("getUser: {}", id);
         User user = userService.getUserByUserLoginId(id);
         return ResponseEntity.ok(user);
     }

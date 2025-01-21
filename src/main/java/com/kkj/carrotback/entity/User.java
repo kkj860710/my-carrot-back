@@ -1,5 +1,7 @@
 package com.kkj.carrotback.entity;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Column;
@@ -25,13 +27,17 @@ import java.time.format.DateTimeFormatter;
 public class User {
 
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID", nullable = false)
     private String userId;
 
     @Size(max = 50)
-    @NotNull
     @Column(name = "USER_LOGIN_ID", nullable = false, length = 50)
     private String userLoginId;
+
+    @Size(max = 50)
+    @Column(name = "USER_PASSWORD", nullable = false, length = 50)
+    private String userPassword;
 
     @Size(max = 50)
     @Column(name = "USER_EMAIL", length = 50)
@@ -46,12 +52,12 @@ public class User {
     @Column(name = "USER_PHONE_NO", length = 2)
     private String userPhoneNo;
 
-    @NotNull
+
     @Column(name = "USER_BIRTH_DATE")
     private Instant userBirthDate;
 
-    @NotNull
-    @Column(name = "CREATE_DATE", nullable = false, updatable = false)
+
+    @Column(name = "CREATE_DATE", nullable = false)
     private Instant userCreateDate;
 
     @Column(name = "LAST_UPDATE")
