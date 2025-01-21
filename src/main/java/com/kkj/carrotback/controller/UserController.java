@@ -1,5 +1,6 @@
 package com.kkj.carrotback.controller;
 
+import com.kkj.carrotback.dto.UserDto;
 import com.kkj.carrotback.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +18,21 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> signUp(@RequestBody User user) {
         log.info("createUser: {}", user);
         User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
     }
 
-    @GetMapping("/sign-in")
-    public ResponseEntity<User> getUser(@RequestParam String id) {
-        log.info("getUser: {}", id);
-        User user = userService.getUserByUserLoginId(id);
-        return ResponseEntity.ok(user);
+    @PostMapping("/sign-in")
+    public ResponseEntity<User> signIn(@RequestBody UserDto userDto) {
+        log.info("getUser: {}", userDto);
+        User user = userService.getUserByUserLoginId(userDto);
+        if(user == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(user);
+        }
     }
 
 }
