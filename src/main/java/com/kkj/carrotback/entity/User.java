@@ -32,11 +32,10 @@ public class User {
     private String userId;
 
     @Size(max = 50)
-    @Column(name = "USER_LOGIN_ID", nullable = false, length = 50)
+    @Column(name = "USER_LOGIN_ID", nullable = false, length = 500)
     private String userLoginId;
 
-    @Size(max = 50)
-    @Column(name = "USER_PASSWORD", nullable = false, length = 50)
+    @Column(name = "USER_PASSWORD", nullable = false, length = 500)
     private String userPassword;
 
     @Size(max = 50)
