@@ -18,17 +18,18 @@ public class UserService {
     private final Bcrypt bcrypt;
 
     public User getUserByUserLoginId(UserDto userDto) {
+        User getUser = new User();
         User user = userRepository.findByUserLoginId(userDto.getUserLoginId());
-        if(user != null) {
-            if(bcrypt.isMatch(userDto.getUserPassword(), user.getUserPassword())) {
-                return user;
-            } else {
-                return null;
+        if (user != null) {
+            if (bcrypt.isMatch(userDto.getUserPassword(), user.getUserPassword())) {
+                getUser = user;
             }
         } else {
-            return null;
+            getUser = null;
         }
+        return getUser;
     }
+
 
 
     public User createUser(User user) {

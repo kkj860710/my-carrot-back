@@ -29,7 +29,7 @@ public class UserController {
         log.info("getUser: {}", userDto);
         User user = userService.getUserByUserLoginId(userDto);
         if(user == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ofNullable(null);
         } else {
             return ResponseEntity.ok(user);
         }
