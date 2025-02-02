@@ -1,34 +1,29 @@
 package com.kkj.carrotback.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import com.kkj.carrotback.util.Common;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "TB_USER")
-public class User {
+public class User extends BaseEntity {  // ✅ Basic 상속
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID", nullable = false)
+    @Column(name = "USER_ID", nullable = false, unique = true)
     private String userId;
 
     @Size(max = 50)
@@ -48,49 +43,20 @@ public class User {
     private String userName;
 
     @Size(max = 20)
-    @Column(name = "USER_PHONE_NO", length = 2)
+    @Column(name = "USER_PHONE_NO", length = 20)
     private String userPhoneNo;
-
 
     @Column(name = "USER_BIRTH_DATE")
     private Instant userBirthDate;
 
-
-    @Column(name = "CREATE_DATE", nullable = false)
-    private Instant userCreateDate;
-
-    @Column(name = "LAST_UPDATE")
-    private Instant userLastDate;
-
     @Column(name = "ROLE", nullable = false)
     private String role;
 
-//    생성시 자동 시간 입력, 프론트에서 처리 필요 없음
+    // 생성시 자동 userId 부여
     @PrePersist
-    public void prePersist() {
-        Instant now = Instant.now();
-        this.userCreateDate = now;
-        this.userLastDate = now;
-
-        // userId 무작위 생성
-        if(this.userId == null || this.userId.isEmpty()) {
-            this.userId = generateUserId();
+    public void prePersistUser() {
+        if (this.userId == null || this.userId.isEmpty()) {
+            this.userId = Common.generateUserId("USER");
         }
-
     }
-
-    private String generateUserId() {
-        // 날짜 부분 생성
-        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        // 유니크한 넘버 생성
-        String uniqueNumber = String.format("%04d", (int) (Math.random() * 10000));
-        return "USER" + date + uniqueNumber;
-    }
-
-    // 업데이트시 자동 시간 업데이트, 프론트에서 처리 필요 없음
-    @PreUpdate
-    public void preUpdate() {
-        this.userLastDate = Instant.now();
-    }
-
 }
